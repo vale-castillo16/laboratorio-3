@@ -45,6 +45,7 @@ class Analizador:
             except (KeyError, ValueError) as e:
                 print(f"Error procesando registro: {registro} -> {e}")
         return total
+    
     def exportaciones_totales_por_mes(self):
         """Retorna un diccionario con ventas totales por provincia."""
         exportaciones_por_mes = {}
