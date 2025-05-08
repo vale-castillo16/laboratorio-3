@@ -30,7 +30,6 @@ class TestAnalizador(unittest.TestCase):
         self.assertTrue(all(float(v) > 2000 for v in resumen.values()))
 
     def test_exportaciones_multiple_meses(self):
-        # Creamos una subclase mock de Analizador para inyectar datos directamente
         class AnalizadorMock(Analizador):
             def __init__(self, datos):
                 self.datos = datos
@@ -55,10 +54,26 @@ class TestAnalizador(unittest.TestCase):
         resultado = instancia.exportaciones_totales_por_mes()
         self.assertEqual(resultado['Enero'], 300.5)
         self.assertEqual(resultado['Febrero'], 300.0)
-        
+
     def test_exportaciones_no_esta_vacio(self):
         resumen = self.analizador.exportaciones_totales_por_mes()
         self.assertGreater(len(resumen), 0, "El diccionario de exportaciones está vacío")
+
+    def test_diferencia_ventas_exportaciones(self):
+        # Datos simulados para prueba específica
+        class AnalizadorMock(Analizador):
+            def __init__(self, datos):
+                self.datos = datos
+
+        datos = [
+            {'PROVINCIA': 'Pichincha', 'TOTAL_VENTAS': '10000.00', 'EXPORTACIONES': '2000.00'},
+            {'PROVINCIA': 'Pichincha', 'TOTAL_VENTAS': '5000.00', 'EXPORTACIONES': '1000.00'},
+            {'PROVINCIA': 'Guayas', 'TOTAL_VENTAS': '8000.00', 'EXPORTACIONES': '3000.00'}
+        ]
+        instancia = AnalizadorMock(datos)
+        resultado = instancia.diferencia_ventas_exportaciones_por_provincia()
+        self.assertEqual(resultado['Pichincha'], 12000.00)
+        self.assertEqual(resultado['Guayas'], 5000.00)
 
 
 if __name__ == "__main__":
